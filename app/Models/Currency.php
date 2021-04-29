@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -52,16 +53,36 @@ class Currency extends Model
     ];
 
     /**
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public static function getForSelect(): mixed
+    public function assets()
+    {
+        return $this->hasMany(Asset::class, 'currency_id', 'cmc_id');
+    }
+
+    /**
+     * @return array
+     */
+    public static function getForSelect()
     {
         return self::select([
-            'slug',
-            DB::raw("CONCAT(cmc_rank,'. ',symbol,' ',name) as symbol")
-        ])
+                'cmc_id',
+                DB::raw("CONCAT(cmc_rank,'. ',symbol,' ',name) as symbol")
+            ])
+            ->whereNotIn('cmc_id', Asset::getUserCurrencies())
             ->get()
-            ->pluck('symbol', 'slug')
+            ->pluck('symbol', 'cmc_id')
             ->toArray();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getLastUpdateTime()
+    {
+        return self::select('updated_at')
+            ->orderBy('updated_at', 'desc')
+            ->first()
+            ->updated_at ?? null;
     }
 }

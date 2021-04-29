@@ -18,7 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->bigInteger('asset_id');
             $table->decimal('quantity',17,7);
             $table->decimal('price',17,7);
-            $table->decimal('result',17,7);
+            $table->string('result');
             $table->timestamps();
         });
     }

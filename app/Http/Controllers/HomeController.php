@@ -23,16 +23,6 @@ class HomeController extends Controller
     /**
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        $currencies = Currency::getForSelect();
-
-        return view('tables', compact('currencies'));
-    }
-
-    /**
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function profile()
     {
         $user = User::find(Auth::id());

@@ -35,8 +35,8 @@
                     <span class="fs-4"> Hodler</span>
                 </a>
                 <ul class="nav nav-pills">
-                    <li class="nav-item"><a href="{{ route('home') }}" class="nav-link" >Криптовалюты</a></li>
-                    <li class="nav-item"><a href="{{ route('profile') }}" class="nav-link text-secondary">Профиль</a></li>
+                    <li class="nav-item"><a href="{{ route('home') }}" class="nav-link {{ Route::currentRouteName() === 'home' ? 'text-primary' : 'text-secondary' }}">Криптовалюты</a></li>
+                    <li class="nav-item"><a href="{{ route('profile') }}" class="nav-link {{ Route::currentRouteName() === 'profile' ? 'text-primary' : 'text-secondary' }}">Профиль</a></li>
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('logout') }}"
                            onclick="event.preventDefault();document.getElementById('logout-form').submit();">
