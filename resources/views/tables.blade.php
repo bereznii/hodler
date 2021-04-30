@@ -25,7 +25,7 @@
                             <th>Актив</th>
                             <th>Цена покупки</th>
                             <th>Текущая цена</th>
-                            <th>Процент изменения</th>
+                            <th>Изменение</th>
                             <th>Количество</th>
                             <th>Стоимость актива</th>
                             <th></th>
@@ -53,12 +53,12 @@
                                         <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $value->id }}">
                                             Действие
                                         </button>
-                                        <button class="btn btn-outline-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                                        <button disabled class="btn btn-outline-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                                             История
                                         </button>
-                                        <a class="btn btn-outline-danger" type="button" onclick="return confirm('Удалить актив?');">
+                                        <button disabled class="btn btn-outline-danger" type="button" onclick="return confirm('Удалить актив?');">
                                             Удалить
-                                        </a>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>

@@ -38,7 +38,8 @@ class Asset extends Model
 
         $increase = $currentPrice - $buyPrice;
         $difference = ($increase / $buyPrice) * 100;
-        return $difference;
+
+        return self::formatFloat($difference);
     }
 
     /**
