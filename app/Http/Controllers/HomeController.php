@@ -35,8 +35,13 @@ class HomeController extends Controller
      */
     public function updateProfile(Request $request)
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|string',
+        ]);
+
         $user = User::find(Auth::id());
-        $user->name = request('name');
+        $user->name = $validated['name'];
         if ($password = request('password', false)) {
             $user->password = Hash::make($password);
         }
