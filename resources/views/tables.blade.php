@@ -56,6 +56,9 @@
                                         <button class="btn btn-outline-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                                             История
                                         </button>
+                                        <a class="btn btn-outline-danger" type="button" onclick="return confirm('Удалить актив?');">
+                                            Удалить
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
