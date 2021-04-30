@@ -85,4 +85,21 @@ class Currency extends Model
             ->first()
             ->updated_at ?? null;
     }
+
+    /**
+     * @return string
+     */
+    public function getCurrentPrice(): string
+    {
+        return self::formatFloat($this->price);
+    }
+
+    /**
+     * @param float|int $value
+     * @return string
+     */
+    private static function formatFloat(float|int $value): string
+    {
+        return number_format((float)$value, 2, '.', '');
+    }
 }

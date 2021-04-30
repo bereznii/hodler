@@ -46,7 +46,8 @@ class Asset extends Model
      */
     public function getAssetPrice(): float
     {
-        return $this->currency->price * $this->getAssetQuantity();
+        $price = $this->currency->price * $this->getAssetQuantity();
+        return self::formatFloat($price);
     }
 
     /**
@@ -105,7 +106,8 @@ class Asset extends Model
             return $carry;
         }, ['quantity' => 0, 'price' => 0]);
 
-        return $result['price'] / ($result['quantity'] === 0 ? 1 : $result['quantity']);
+        $price = $result['price'] / ($result['quantity'] === 0 ? 1 : $result['quantity']);
+        return self::formatFloat($price);
     }
 
     /**
@@ -114,10 +116,21 @@ class Asset extends Model
      */
     public static function getOverallPrice(Collection $assets): float
     {
-        return $assets->count() === 0
+        $price = $assets->count() === 0
             ? 0
             : $assets->reduce(function ($carry, $item) {
                 return $carry + $item->getAssetPrice();
             });
+
+        return self::formatFloat($price);
+    }
+
+    /**
+     * @param float|int $value
+     * @return string
+     */
+    private static function formatFloat(float|int $value): string
+    {
+        return number_format((float)$value, 2, '.', '');
     }
 }

@@ -42,7 +42,7 @@
                                     </div>
                                 </td>
                                 <td>{{ $value->getAveragePrice() }}$</td>
-                                <td>{{ $value->currency->price }}$</td>
+                                <td>{{ $value->currency->getCurrentPrice() }}$</td>
                                 <td class="{{ $value->getPriceDifference() >= 0 ? 'text-success' : 'text-danger' }}">
                                     {{ $value->getPriceDifference() }}%
                                 </td>
