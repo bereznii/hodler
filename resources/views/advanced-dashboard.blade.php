@@ -61,30 +61,59 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
+                        <div class="card-header border-0">
+{{--                            <div class="d-flex justify-content-between">--}}
+{{--                                <h3 class="card-title">Все активы</h3>--}}
+{{--                            </div>--}}
+
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#assetCreateModal">
+                                Добавить актив
+                            </button>
+                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
+                                        <th>#</th>
                                         <th>Актив</th>
-                                        <th>Вложения</th>
-                                        <th>Текущая стоимость</th>
+                                        <th>Цена покупки</th>
+                                        <th>Текущая цена</th>
                                         <th>Изменение</th>
+                                        <th>Количество</th>
+                                        <th>Стоимость актива</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($assets as $value)
                                         <tr>
+                                            <td>{{ $value->currency->cmc_rank }}</td>
                                             <td>
                                                 <div class="d-flex flex-row justify-content-start">
                                                     <img class="coin-logo mr-1" src="https://s2.coinmarketcap.com/static/img/coins/64x64/{{ $value->currency_id }}.png" width="22" height="22">
                                                     {{ $value->currency->name }}
                                                 </div>
                                             </td>
-                                            <td>{{ $value->getBuyPrice() }}$</td>
-                                            <td>{{ $value->getAssetPrice() }}$</td>
+                                            <td>{{ $value->getAveragePrice() }}$</td>
+                                            <td>{{ $value->currency->getCurrentPrice() }}$</td>
                                             <td class="{{ $value->getPriceDifference() >= 0 ? 'text-success' : 'text-danger' }}">
-                                                <b>{{ $value->getPriceDifference() }}%</b>
+                                                {{ $value->getPriceDifference() }}%
+                                            </td>
+                                            <td>{{ $value->getAssetQuantity() }}</td>
+                                            <td>{{ $value->getAssetPrice() }}$</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#assetModal{{ $value->id }}">
+                                                        Действие
+                                                    </button>
+                                                    <a class="btn btn-outline-danger confirm-delete" href="#" data-confirm="Удалить актив?" data-delete-form="delete-asset-{{ $value->id }}">
+                                                        Удалить
+                                                    </a>
+                                                </div>
+                                                <form id="delete-asset-{{ $value->id }}" action="{{ route('asset.delete', ['id' => $value->id]) }}" method="POST" class="d-none">
+                                                    @csrf
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

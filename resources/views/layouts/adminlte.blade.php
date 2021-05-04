@@ -83,6 +83,14 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('advanced') }}" class="nav-link {{ Route::currentRouteName() === 'advanced' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Расширенный
+                            </p>
+                        </a>
+                    </li>
                     <li class="nav-header">Настройки</li>
                     <li class="nav-item">
                         <a href="{{ route('profile') }}" class="nav-link {{ Route::currentRouteName() === 'profile' ? 'active' : '' }}">

@@ -37,6 +37,20 @@ class AssetController extends Controller
     }
 
     /**
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function advanced()
+    {
+        $currencies = Currency::getForSelect();
+        $assets = Asset::getForTable();
+        $investedPrice = Asset::getInvestedPrice($assets);
+        $overallPrice = Asset::getOverallPrice($assets);
+        $currencyUpdate = Currency::getLastUpdateTime();
+
+        return view('advanced-dashboard', compact('currencies', 'assets', 'investedPrice', 'overallPrice', 'currencyUpdate'));
+    }
+
+    /**
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
