@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asset;
 use App\Models\Currency;
 use App\Models\User;
 use Illuminate\Http\Request;

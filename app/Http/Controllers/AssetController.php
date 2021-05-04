@@ -29,10 +29,11 @@ class AssetController extends Controller
     {
         $currencies = Currency::getForSelect();
         $assets = Asset::getForTable();
+        $investedPrice = Asset::getInvestedPrice($assets);
         $overallPrice = Asset::getOverallPrice($assets);
         $currencyUpdate = Currency::getLastUpdateTime();
 
-        return view('tables', compact('currencies', 'assets', 'overallPrice', 'currencyUpdate'));
+        return view('main-dashboard', compact('currencies', 'assets', 'investedPrice', 'overallPrice', 'currencyUpdate'));
     }
 
     /**
@@ -72,6 +73,18 @@ class AssetController extends Controller
         } else {
             $request->session()->flash('notification', 'Произошла ошибка.');
         }
+
+        return redirect()->route('home');
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete($id)
+    {
+        Asset::find($id)->delete();
+        Transaction::where('asset_id', $id)->delete();
 
         return redirect()->route('home');
     }

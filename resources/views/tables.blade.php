@@ -53,12 +53,12 @@
                                         <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $value->id }}">
                                             Действие
                                         </button>
-                                        <button disabled class="btn btn-outline-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                                            История
-                                        </button>
-                                        <button disabled class="btn btn-outline-danger" type="button" onclick="return confirm('Удалить актив?');">
+                                        <a class="btn btn-outline-danger confirm-delete" href="#" data-confirm="Удалить актив?" data-delete-form="delete-asset-{{ $value->id }}">
                                             Удалить
-                                        </button>
+                                        </a>
+                                        <form id="delete-asset-{{ $value->id }}" action="{{ route('asset.delete', ['id' => $value->id]) }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -159,27 +159,6 @@
             </div>
         </div>
     </div>
-
-
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">История транзакций</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="list-group">
-                <a href="#" class="list-group-item" aria-current="true">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Продажа LTC</h5>
-                        <small>3 days ago</small>
-                    </div>
-                    <p class="mb-1">Количество 0.87 по стоимости 270.6$</p>
-                    <small>Зафиксирован убыток в размере 130$</small>
-                </a>
-            </div>
-        </div>
-    </div>
-
 
     @if(session()->pull('asset.create.error'))
         <script>

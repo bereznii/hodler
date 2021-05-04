@@ -52,6 +52,15 @@ class Asset extends Model
     }
 
     /**
+     * @return float
+     */
+    public function getBuyPrice(): float
+    {
+        $price = $this->getAveragePrice() * $this->getAssetQuantity();
+        return self::formatFloat($price);
+    }
+
+    /**
      * @return Builder[]|Collection
      */
     public static function getForTable()
@@ -107,7 +116,7 @@ class Asset extends Model
             return $carry;
         }, ['quantity' => 0, 'price' => 0]);
 
-        $price = $result['price'] / ($result['quantity'] === 0 ? 1 : $result['quantity']);
+        $price = $result['price'] / ($result['quantity'] == 0 ? 1 : $result['quantity']);
         return self::formatFloat($price);
     }
 
@@ -121,6 +130,21 @@ class Asset extends Model
             ? 0
             : $assets->reduce(function ($carry, $item) {
                 return $carry + $item->getAssetPrice();
+            });
+
+        return self::formatFloat($price);
+    }
+
+    /**
+     * @param Collection $assets
+     * @return float
+     */
+    public static function getInvestedPrice(Collection $assets): float
+    {
+        $price = $assets->count() === 0
+            ? 0
+            : $assets->reduce(function ($carry, $item) {
+                return $carry + $item->getBuyPrice();
             });
 
         return self::formatFloat($price);
