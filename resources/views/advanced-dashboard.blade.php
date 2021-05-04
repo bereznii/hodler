@@ -7,12 +7,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Дашборд</h1>
+                    <h1 class="m-0">Расширенный дашборд</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Домой</a></li>
-                        <li class="breadcrumb-item active">Дашборд</li>
+                        <li class="breadcrumb-item active">Расширенный дашборд</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -81,6 +81,7 @@
                                         <th>Текущая цена</th>
                                         <th>Изменение</th>
                                         <th>Количество</th>
+                                        <th>Вложения</th>
                                         <th>Стоимость актива</th>
                                         <th></th>
                                     </tr>
@@ -101,6 +102,7 @@
                                                 {{ $value->getPriceDifference() }}%
                                             </td>
                                             <td>{{ $value->getAssetQuantity() }}</td>
+                                            <td>{{ $value->getBuyPrice() }}$</td>
                                             <td>{{ $value->getAssetPrice() }}$</td>
                                             <td>
                                                 <div class="btn-group">
