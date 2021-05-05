@@ -77,7 +77,7 @@
                     <li class="nav-header">Дашборды</li>
                     <li class="nav-item">
                         <a href="{{ route('home') }}" class="nav-link {{ Route::currentRouteName() === 'home' ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-th"></i>
+                            <i class="nav-icon fas fa-th-large"></i>
                             <p>
                                 Основной
                             </p>
@@ -94,7 +94,7 @@
                     <li class="nav-header">Настройки</li>
                     <li class="nav-item">
                         <a href="{{ route('profile') }}" class="nav-link {{ Route::currentRouteName() === 'profile' ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-th"></i>
+                            <i class="nav-icon fas fa-user-alt"></i>
                             <p>
                                 Профиль
                             </p>
