@@ -24,18 +24,18 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-3 col-12">
+                <div class="col-md-6 col-xl-3 col-12">
                     <div class="info-box shadow-none">
                         <span class="info-box-icon bg-warning"><i class="fas fa-money-bill-wave"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Стоимость фиатных вложений</span>
+                            <span class="info-box-text">Фиатные вложения</span>
                             <span class="info-box-number">{{ $fiatInvested }}$</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
-                <div class="col-sm-4 col-12">
+                <div class="col-md-6 col-xl-3 col-12">
                     <div class="info-box shadow-none">
                         <span class="info-box-icon {{ $fiatInvested < $overallPrice ? 'bg-success' : 'bg-danger' }}"><i class="fas fa-wallet"></i></span>
 

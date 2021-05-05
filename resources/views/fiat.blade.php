@@ -45,7 +45,7 @@
                                         @foreach($fiats as $fiat)
                                             <tr>
                                                 <td>{{ $fiat->price }}$</td>
-                                                <td>{{ $fiat->created_at }}</td>
+                                                <td style="white-space: nowrap;">{{ $fiat->created_at }}</td>
                                                 <td>
                                                     <div class="btn-group">
                                                         <a class="btn btn-outline-danger confirm-delete" href="#" data-confirm="Удалить вложение?" data-delete-form="delete-asset-{{ $fiat->id }}">
