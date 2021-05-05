@@ -24,35 +24,24 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-4 col-12">
+                <div class="col-sm-3 col-12">
                     <div class="info-box shadow-none">
-                        <span class="info-box-icon bg-info"><i class="fas fa-sync-alt"></i></span>
+                        <span class="info-box-icon bg-warning"><i class="fas fa-money-bill-wave"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Цены актуальны на</span>
-                            <span class="info-box-number">{{ $currencyUpdate }}</span>
+                            <span class="info-box-text">Стоимость фиатных вложений</span>
+                            <span class="info-box-number">{{ $fiatInvested }}$</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
                 <div class="col-sm-4 col-12">
                     <div class="info-box shadow-none">
-                        <span class="info-box-icon bg-info"><i class="fas fa-dollar-sign"></i></span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Стоимость вложений</span>
-                            <span class="info-box-number">{{ $investedPrice }}$</span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                </div>
-                <div class="col-sm-4 col-12">
-                    <div class="info-box shadow-none">
-                        <span class="info-box-icon {{ $investedPrice < $overallPrice ? 'bg-success' : 'bg-danger' }}"><i class="fas fa-wallet"></i></span>
+                        <span class="info-box-icon {{ $fiatInvested < $overallPrice ? 'bg-success' : 'bg-danger' }}"><i class="fas fa-wallet"></i></span>
 
                         <div class="info-box-content">
                             <span class="info-box-text">Стоимость портфеля</span>
-                            <span class="info-box-number {{ $investedPrice < $overallPrice ? 'text-success' : 'text-danger' }}">{{ $overallPrice }}$</span>
+                            <span class="info-box-number {{ $fiatInvested < $overallPrice ? 'text-success' : 'text-danger' }}">{{ $overallPrice }}$</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>

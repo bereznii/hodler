@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Asset;
 use App\Models\Currency;
+use App\Models\Fiat;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -29,11 +30,14 @@ class AssetController extends Controller
     {
         $currencies = Currency::getForSelect();
         $assets = Asset::getForTable();
-        $investedPrice = Asset::getInvestedPrice($assets);
         $overallPrice = Asset::getOverallPrice($assets);
         $currencyUpdate = Currency::getLastUpdateTime();
+        $fiatInvested = Fiat::getInvestmentsSize();
 
-        return view('main-dashboard', compact('currencies', 'assets', 'investedPrice', 'overallPrice', 'currencyUpdate'));
+        return view(
+            'main-dashboard',
+            compact('currencies', 'assets', 'overallPrice', 'currencyUpdate', 'fiatInvested')
+        );
     }
 
     /**
@@ -46,8 +50,12 @@ class AssetController extends Controller
         $investedPrice = Asset::getInvestedPrice($assets);
         $overallPrice = Asset::getOverallPrice($assets);
         $currencyUpdate = Currency::getLastUpdateTime();
+        $fiatInvested = Fiat::getInvestmentsSize();
 
-        return view('advanced-dashboard', compact('currencies', 'assets', 'investedPrice', 'overallPrice', 'currencyUpdate'));
+        return view(
+            'advanced-dashboard',
+            compact('currencies', 'assets', 'investedPrice', 'overallPrice', 'currencyUpdate', 'fiatInvested')
+        );
     }
 
     /**
@@ -88,7 +96,7 @@ class AssetController extends Controller
             $request->session()->flash('notification', 'Произошла ошибка.');
         }
 
-        return redirect()->route('home');
+        return redirect()->route('advanced');
     }
 
     /**
@@ -100,6 +108,6 @@ class AssetController extends Controller
         Asset::find($id)->delete();
         Transaction::where('asset_id', $id)->delete();
 
-        return redirect()->route('home');
+        return redirect()->route('advanced');
     }
 }
