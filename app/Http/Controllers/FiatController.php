@@ -27,8 +27,9 @@ class FiatController extends Controller
     public function index()
     {
         $fiats = Fiat::where('user_id', Auth::id())->get();
+        $fiatInvested = Fiat::getInvestmentsSize();
 
-        return view('fiat', compact('fiats'));
+        return view('fiat', compact('fiats', 'fiatInvested'));
     }
 
     /**

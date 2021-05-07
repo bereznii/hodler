@@ -24,6 +24,19 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
+                <div class="col-md-6 col-xl-3 col-12">
+                    <div class="info-box shadow-none">
+                        <span class="info-box-icon bg-warning"><i class="fas fa-money-bill-wave"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Фиатные вложения</span>
+                            <span class="info-box-number">{{ $fiatInvested }}$</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header border-0">
