@@ -33,10 +33,12 @@ class AssetController extends Controller
         $overallPrice = Asset::getOverallPrice($assets);
         $currencyUpdate = Currency::getLastUpdateTime();
         $fiatInvested = Fiat::getInvestmentsSize();
+        $totalPnl = Asset::getTotalPnl($overallPrice, $fiatInvested);
+        $isPositive = $totalPnl['moneyDifference'] > 0;
 
         return view(
             'main-dashboard',
-            compact('currencies', 'assets', 'overallPrice', 'currencyUpdate', 'fiatInvested')
+            compact('currencies', 'assets', 'overallPrice', 'currencyUpdate', 'fiatInvested', 'totalPnl', 'isPositive')
         );
     }
 
@@ -51,10 +53,12 @@ class AssetController extends Controller
         $overallPrice = Asset::getOverallPrice($assets);
         $currencyUpdate = Currency::getLastUpdateTime();
         $fiatInvested = Fiat::getInvestmentsSize();
+        $totalPnl = Asset::getTotalPnl($overallPrice, $fiatInvested);
+        $isPositive = $totalPnl['moneyDifference'] > 0;
 
         return view(
             'advanced-dashboard',
-            compact('currencies', 'assets', 'investedPrice', 'overallPrice', 'currencyUpdate', 'fiatInvested')
+            compact('currencies', 'assets', 'investedPrice', 'overallPrice', 'currencyUpdate', 'fiatInvested', 'totalPnl', 'isPositive')
         );
     }
 

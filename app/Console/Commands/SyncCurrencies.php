@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class SyncCurrencies extends Command
 {
-    private const MARKET_CAP_MIN = 5000000000;
+    private const MARKET_CAP_MIN = 1000000000;
 
     /**
      * The name and signature of the console command.

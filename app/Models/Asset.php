@@ -29,13 +29,25 @@ class Asset extends Model
     }
 
     /**
+     * @param string $type
      * @return float
      */
-    public function getPriceDifference(): float
+    public function getPriceDifference(string $type): float
     {
-        $buyPrice = $this->getAveragePrice();
-        $currentPrice = $this->currency->price;
+        return match($type) {
+            'percent' => $this->getPercentPriceDifference($this->getAveragePrice()),
+            'money' => self::formatFloat($this->getAssetPrice() - $this->getBuyPrice()),
+            'default' => null
+        };
+    }
 
+    /**
+     * @param float $buyPrice
+     * @return string
+     */
+    private function getPercentPriceDifference(float $buyPrice)
+    {
+        $currentPrice = $this->currency->price;
         $increase = $currentPrice - $buyPrice;
         $difference = ($increase / $buyPrice) * 100;
 
@@ -157,5 +169,21 @@ class Asset extends Model
     private static function formatFloat(float|int $value): string
     {
         return number_format((float)$value, 2, '.', '');
+    }
+
+    /**
+     * @param float $overallPrice
+     * @param float $fiatInvested
+     * @return array
+     */
+    public static function getTotalPnl(float $overallPrice, float $fiatInvested): array
+    {
+        $increase = $overallPrice - $fiatInvested;
+        $difference = ($increase / $fiatInvested) * 100;
+
+        $pnl['percentDifference'] = self::formatFloat($difference);
+        $pnl['moneyDifference'] = $overallPrice - $fiatInvested;
+
+        return $pnl;
     }
 }

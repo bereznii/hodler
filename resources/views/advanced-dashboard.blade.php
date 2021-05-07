@@ -59,11 +59,30 @@
                 </div>
                 <div class="col-md-6 col-xl-3 col-12">
                     <div class="info-box shadow-none">
-                        <span class="info-box-icon {{ $fiatInvested < $overallPrice ? 'bg-success' : 'bg-danger' }}"><i class="fas fa-wallet"></i></span>
+                        <span class="info-box-icon {{ $isPositive ? 'bg-success' : 'bg-danger' }}"><i class="fas fa-wallet"></i></span>
 
                         <div class="info-box-content">
                             <span class="info-box-text">Стоимость портфеля</span>
-                            <span class="info-box-number {{ $fiatInvested < $overallPrice ? 'text-success' : 'text-danger' }}">{{ $overallPrice }}$</span>
+                            <span class="info-box-number {{ $isPositive ? 'text-success' : 'text-danger' }}">{{ $overallPrice }}$</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3 col-12">
+                    <div class="info-box shadow-none">
+                        <span class="info-box-icon {{ $isPositive ? 'bg-success' : 'bg-danger' }}">
+                            <i class="fas fa-exchange-alt"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                Совокупный PNL
+                                <i class="far fa-question-circle" title="Profit and Loss"></i>
+                            </span>
+                            <span class="info-box-number {{ $isPositive ? 'text-success' : 'text-danger' }}">
+                                {!! $isPositive ? '<i class="far fa-arrow-alt-circle-up"></i>' : '<i class="far fa-arrow-alt-circle-down"></i>' !!}
+                                {{ $totalPnl['moneyDifference'] }}$ | {{ $totalPnl['percentDifference'] }}%
+                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -86,10 +105,10 @@
                                         <th>Актив</th>
                                         <th>Цена покупки</th>
                                         <th>Текущая цена</th>
-                                        <th>Изменение</th>
                                         <th>Количество</th>
                                         <th>Вложения</th>
                                         <th>Стоимость актива</th>
+                                        <th>Изменение</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -103,23 +122,32 @@
                                                     {{ $value->currency->name }}
                                                 </div>
                                             </td>
-                                            <td>{{ $value->getAveragePrice() }}$</td>
-                                            <td>{{ $value->currency->getCurrentPrice() }}$</td>
-                                            <td class="{{ $value->getPriceDifference() >= 0 ? 'text-success' : 'text-danger' }}">
-                                                {{ $value->getPriceDifference() }}%
+                                            <td>
+                                                {{ $value->getAveragePrice() }}$
+                                            </td>
+                                            <td>
+                                                {{ $value->currency->getCurrentPrice() }}$
                                             </td>
                                             <td>{{ $value->getAssetQuantity() }}</td>
                                             <td>{{ $value->getBuyPrice() }}$</td>
                                             <td>{{ $value->getAssetPrice() }}$</td>
+                                            <td class="{{ $value->getPriceDifference('money') >= 0 ? 'text-success' : 'text-danger' }}">
+                                                <b>
+                                                    {{ $value->getPriceDifference('percent') }}%
+                                                    <br>
+                                                    {{ $value->getPriceDifference('money') }}$
+                                                </b>
+                                            </td>
                                             <td>
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#assetModal{{ $value->id }}">
-                                                        Действие
-                                                    </button>
-                                                    <a class="btn btn-outline-danger confirm-delete" href="#" data-confirm="Удалить актив?" data-delete-form="delete-asset-{{ $value->id }}">
-                                                        Удалить
-                                                    </a>
-                                                </div>
+                                                <a type="button" class="btn btn-outline-info" target="_blank" href="https://coinmarketcap.com/currencies/{{ $value->currency->slug }}/">
+                                                    <img src="{{ asset('img/coinmarketcap-logo.png') }}" alt="CMC" width="20" height="20">
+                                                </a>
+                                                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#assetModal{{ $value->id }}">
+                                                    Действие
+                                                </button>
+                                                <a class="btn btn-outline-danger confirm-delete" href="#" data-confirm="Удалить актив?" data-delete-form="delete-asset-{{ $value->id }}">
+                                                    Удалить
+                                                </a>
                                                 <form id="delete-asset-{{ $value->id }}" action="{{ route('asset.delete', ['id' => $value->id]) }}" method="POST" class="d-none">
                                                     @csrf
                                                 </form>

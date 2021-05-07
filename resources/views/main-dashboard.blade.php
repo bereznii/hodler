@@ -37,11 +37,34 @@
                 </div>
                 <div class="col-md-6 col-xl-3 col-12">
                     <div class="info-box shadow-none">
-                        <span class="info-box-icon {{ $fiatInvested < $overallPrice ? 'bg-success' : 'bg-danger' }}"><i class="fas fa-wallet"></i></span>
+                        <span class="info-box-icon {{ $fiatInvested < $overallPrice ? 'bg-success' : 'bg-danger' }}">
+                            <i class="fas fa-wallet"></i>
+                        </span>
 
                         <div class="info-box-content">
                             <span class="info-box-text">Стоимость портфеля</span>
-                            <span class="info-box-number {{ $fiatInvested < $overallPrice ? 'text-success' : 'text-danger' }}">{{ $overallPrice }}$</span>
+                            <span class="info-box-number {{ $isPositive ? 'text-success' : 'text-danger' }}">
+                                {{ $overallPrice }}$
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3 col-12">
+                    <div class="info-box shadow-none">
+                        <span class="info-box-icon {{ $isPositive ? 'bg-success' : 'bg-danger' }}">
+                            <i class="fas fa-exchange-alt"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                Совокупный PNL
+                                <i class="far fa-question-circle" title="Profit and Loss"></i>
+                            </span>
+                            <span class="info-box-number {{ $isPositive ? 'text-success' : 'text-danger' }}">
+                                {!! $isPositive ? '<i class="far fa-arrow-alt-circle-up"></i>' : '<i class="far fa-arrow-alt-circle-down"></i>' !!}
+                                {{ $totalPnl['moneyDifference'] }}$ | {{ $totalPnl['percentDifference'] }}%
+                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -54,12 +77,10 @@
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
-                                    <tr>
-                                        <th>Актив</th>
-                                        <th>Вложения</th>
-                                        <th>Текущая стоимость</th>
-                                        <th>Изменение</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Актив</th>
+                                            <th>Изменение</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($assets as $value)
@@ -70,10 +91,12 @@
                                                     {{ $value->currency->name }}
                                                 </div>
                                             </td>
-                                            <td>{{ $value->getBuyPrice() }}$</td>
-                                            <td>{{ $value->getAssetPrice() }}$</td>
-                                            <td class="{{ $value->getPriceDifference() >= 0 ? 'text-success' : 'text-danger' }}">
-                                                <b>{{ $value->getPriceDifference() }}%</b>
+                                            <td class="{{ $value->getPriceDifference('money') >= 0 ? 'text-success' : 'text-danger' }}">
+                                                <b>
+                                                    {{ $value->getPriceDifference('percent') }}%
+                                                    <br>
+                                                    {{ $value->getPriceDifference('money') }}$
+                                                </b>
                                             </td>
                                         </tr>
                                     @endforeach
