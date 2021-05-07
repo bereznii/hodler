@@ -139,7 +139,7 @@
                                                 </b>
                                             </td>
                                             <td>
-                                                <a type="button" class="btn btn-outline-info" target="_blank" href="https://coinmarketcap.com/currencies/{{ $value->currency->slug }}/">
+                                                <a class="btn btn-outline-info" target="_blank" href="https://coinmarketcap.com/currencies/{{ $value->currency->slug }}/">
                                                     <img src="{{ asset('img/coinmarketcap-logo.png') }}" alt="CMC" width="20" height="20">
                                                 </a>
                                                 <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#assetModal{{ $value->id }}">
