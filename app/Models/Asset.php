@@ -121,9 +121,6 @@ class Asset extends Model
             if ($item['result'] === Transaction::RESULT_BUY) {
                 $carry['quantity'] += $item['quantity'];
                 $carry['price'] += $item['quantity'] * $item['price'];
-            } else {
-                $carry['quantity'] -= $item['quantity'];
-                $carry['price'] -= $item['quantity'] * $item['price'];
             }
             return $carry;
         }, ['quantity' => 0, 'price' => 0]);

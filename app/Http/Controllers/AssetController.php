@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PriceRequest;
 use App\Models\Asset;
 use App\Models\Currency;
 use App\Models\Fiat;
 use App\Models\Transaction;
+use App\Rules\Decimal;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,17 +65,15 @@ class AssetController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param PriceRequest $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function create(Request $request)
+    public function create(PriceRequest $request)
     {
         try {
             $validated = $request->validate([
-                'currency' => 'required|integer',
-                'quantity' => 'required|numeric',
-                'price' => 'required|numeric',
+                'currency' => 'required|integer'
             ]);
         } catch (ValidationException $e) {
             $request->session()->flash('asset.create.error');
@@ -83,15 +83,13 @@ class AssetController extends Controller
         $asset = new Asset();
         $asset->user_id = Auth::id();
         $asset->currency_id = $validated['currency'];
-        $asset->quantity = $validated['quantity'];
-        $asset->avg_price = $validated['price'];
 
         if ($asset->save()) {
 
             $transaction = new Transaction();
             $transaction->asset_id = $asset->id;
-            $transaction->quantity = $validated['quantity'];
-            $transaction->price = $validated['price'];
+            $transaction->quantity = $request->get('quantity');
+            $transaction->price = $request->get('quantity');
             $transaction->result = Transaction::RESULT_BUY;
             $transaction->save();
 

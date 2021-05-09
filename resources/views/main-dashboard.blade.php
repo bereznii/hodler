@@ -59,7 +59,6 @@
                         <div class="info-box-content">
                             <span class="info-box-text">
                                 Совокупный PNL
-                                <i class="far fa-question-circle" title="Profit and Loss"></i>
                             </span>
                             <span class="info-box-number {{ $isPositive ? 'text-success' : 'text-danger' }}">
                                 {!! $isPositive ? '<i class="far fa-arrow-alt-circle-up"></i>' : '<i class="far fa-arrow-alt-circle-down"></i>' !!}

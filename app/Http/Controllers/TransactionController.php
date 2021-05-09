@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PriceRequest;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -21,17 +22,15 @@ class TransactionController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param PriceRequest $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function create(Request $request)
+    public function create(PriceRequest $request)
     {
         try {
             $validated = $request->validate([
                 'asset_id' => 'required|integer',
-                'quantity' => 'required|numeric',
-                'price' => 'required|numeric',
                 'result' => 'required|string|max:10',
             ]);
         } catch (ValidationException $e) {
@@ -41,8 +40,8 @@ class TransactionController extends Controller
 
         $transaction = new Transaction();
         $transaction->asset_id = $validated['asset_id'];
-        $transaction->quantity = $validated['quantity'];
-        $transaction->price = $validated['price'];
+        $transaction->quantity = $request->get('quantity');
+        $transaction->price = $request->get('price');
         $transaction->result = $validated['result'];
 
         if ($transaction->save()) {
@@ -51,6 +50,6 @@ class TransactionController extends Controller
             $request->session()->flash('notification', 'Произошла ошибка.');
         }
 
-        return redirect()->route('home');
+        return redirect()->route('advanced');
     }
 }

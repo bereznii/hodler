@@ -77,7 +77,6 @@
                         <div class="info-box-content">
                             <span class="info-box-text">
                                 Совокупный PNL
-                                <i class="far fa-question-circle" title="Profit and Loss"></i>
                             </span>
                             <span class="info-box-number {{ $isPositive ? 'text-success' : 'text-danger' }}">
                                 {!! $isPositive ? '<i class="far fa-arrow-alt-circle-up"></i>' : '<i class="far fa-arrow-alt-circle-down"></i>' !!}
@@ -143,7 +142,7 @@
                                                     <img src="{{ asset('img/coinmarketcap-logo.png') }}" alt="CMC" width="20" height="20">
                                                 </a>
                                                 <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#assetModal{{ $value->id }}">
-                                                    Действие
+                                                    Транзакция
                                                 </button>
                                                 <a class="btn btn-outline-danger confirm-delete" href="#" data-confirm="Удалить актив?" data-delete-form="delete-asset-{{ $value->id }}">
                                                     Удалить

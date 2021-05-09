@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 class SyncCurrencies extends Command
 {
     private const MARKET_CAP_MIN = 1000000000;
+    private const DEFAULT_LIMIT = 5000;
+    private const DEFAULT_CMC_RANK = 101;
 
     /**
      * The name and signature of the console command.
@@ -70,6 +72,8 @@ class SyncCurrencies extends Command
                     ]
                 );
             }
+            Currency::where('updated_at', '<', \DB::raw('DATE_SUB(NOW(), INTERVAL 1 MINUTE)'))
+                ->update(['cmc_rank' => self::DEFAULT_CMC_RANK]);
         }
 
         Log::info('Currencies sync finished');
