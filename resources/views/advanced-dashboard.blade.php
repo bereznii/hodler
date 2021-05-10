@@ -189,11 +189,11 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Количество</label>
+                                <label for="exampleFormControlInput1" class="form-label">Количество монет</label>
                                 <input type="text" class="form-control" name="quantity" placeholder="0.0000000">
                             </div>
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Цена, $</label>
+                                <label for="exampleFormControlInput1" class="form-label">Цена за монету, $</label>
                                 <input type="text" class="form-control" name="price" placeholder="0.0000000">
                             </div>
                             @if ($errors->any())
@@ -236,11 +236,11 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Количество</label>
+                            <label for="exampleFormControlInput1" class="form-label">Количество монет</label>
                             <input type="text" class="form-control" name="quantity" placeholder="0.0000000">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Цена, $</label>
+                            <label for="exampleFormControlInput1" class="form-label">Цена за монету, $</label>
                             <input type="text" class="form-control" name="price" placeholder="0.0000000">
                         </div>
                         @if ($errors->any())

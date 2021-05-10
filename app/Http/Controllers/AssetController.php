@@ -89,7 +89,7 @@ class AssetController extends Controller
             $transaction = new Transaction();
             $transaction->asset_id = $asset->id;
             $transaction->quantity = $request->get('quantity');
-            $transaction->price = $request->get('quantity');
+            $transaction->price = $request->get('price');
             $transaction->result = Transaction::RESULT_BUY;
             $transaction->save();
 
