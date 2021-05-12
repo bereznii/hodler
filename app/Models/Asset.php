@@ -175,11 +175,18 @@ class Asset extends Model
      */
     public static function getTotalPnl(float $overallPrice, float $fiatInvested): array
     {
+        if ($overallPrice == 0) {
+            return [
+                'percentDifference' => 0,
+                'moneyDifference' => 0,
+            ];
+        }
+
         $increase = $overallPrice - $fiatInvested;
         $difference = ($increase / $fiatInvested) * 100;
 
         $pnl['percentDifference'] = self::formatFloat($difference);
-        $pnl['moneyDifference'] = $overallPrice - $fiatInvested;
+        $pnl['moneyDifference'] = self::formatFloat($increase);
 
         return $pnl;
     }

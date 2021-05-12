@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PriceRequest;
+use App\Models\Asset;
 use App\Models\Transaction;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 
 class TransactionController extends Controller
 {
@@ -22,30 +24,42 @@ class TransactionController extends Controller
     }
 
     /**
-     * @param PriceRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @param $id
+     * @return Application|Factory|View
      */
-    public function create(PriceRequest $request)
+    public function create($id)
     {
-        try {
-            $validated = $request->validate([
-                'asset_id' => 'required|integer',
-                'result' => 'required|string|max:10',
-            ]);
-        } catch (ValidationException $e) {
-            $request->session()->flash('transaction.create.error', request('asset_id'));
-            throw $e;
-        }
+        $asset = Asset::where([
+            'id' => $id,
+            'user_id' => Auth::id(),
+        ])->firstOrFail();
+
+        return view('_transaction_form', compact('asset'));
+    }
+
+    /**
+     * @param PriceRequest $request
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function store(PriceRequest $request, $id): RedirectResponse
+    {
+        $validated = $request->validate([
+            'result' => 'required|string|max:10',
+        ]);
+        $asset = Asset::where([
+            'id' => $id,
+            'user_id' => Auth::id(),
+        ])->firstOrFail();
 
         $transaction = new Transaction();
-        $transaction->asset_id = $validated['asset_id'];
+        $transaction->asset_id = $asset->id;
         $transaction->quantity = $request->get('quantity');
         $transaction->price = $request->get('price');
         $transaction->result = $validated['result'];
 
         if ($transaction->save()) {
-            $request->session()->flash('notification', 'Актив успешно обновлён!');
+            $request->session()->flash('notification', 'Транзакция успешно добавлена!');
         } else {
             $request->session()->flash('notification', 'Произошла ошибка.');
         }

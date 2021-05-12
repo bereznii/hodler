@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PriceRequest;
 use App\Models\Asset;
 use App\Models\Fiat;
 use App\Models\Transaction;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -33,11 +37,11 @@ class FiatController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param PriceRequest $request
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
-    public function create(Request $request)
+    public function store(PriceRequest $request)
     {
         try {
             $validated = $request->validate([
@@ -53,12 +57,20 @@ class FiatController extends Controller
         $asset->price = $validated['price'];
 
         if ($asset->save()) {
-            $request->session()->flash('notification', 'Актив успешно добавлен!');
+            $request->session()->flash('notification', 'Вложение успешно добавлено!');
         } else {
             $request->session()->flash('notification', 'Произошла ошибка.');
         }
 
         return redirect()->route('fiat');
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function create()
+    {
+        return view('_fiat_form');
     }
 
     /**

@@ -91,9 +91,9 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header border-0">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#assetCreateModal">
+                            <a href="{{ route('asset.create.form') }}" class="btn btn-primary">
                                 Добавить актив
-                            </button>
+                            </a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -141,9 +141,9 @@
                                                 <a class="btn btn-outline-info" target="_blank" href="https://coinmarketcap.com/currencies/{{ $value->currency->slug }}/">
                                                     <img src="{{ asset('img/coinmarketcap-logo.png') }}" alt="CMC" width="20" height="20">
                                                 </a>
-                                                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#assetModal{{ $value->id }}">
+                                                <a href="{{ route('transaction.create.form', ['id' => $value->id]) }}" class="btn btn-outline-primary">
                                                     Транзакция
-                                                </button>
+                                                </a>
                                                 <a class="btn btn-outline-danger confirm-delete" href="#" data-confirm="Удалить актив?" data-delete-form="delete-asset-{{ $value->id }}">
                                                     Удалить
                                                 </a>
@@ -167,136 +167,4 @@
     </div>
     <!-- /.content -->
 
-    @foreach($assets as $value)
-        <div class="modal fade" id="assetModal{{ $value->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form method="POST" action="{{ route('transaction.create') }}">
-                        @csrf
-                        <input type="hidden" name="asset_id" value="{{ $value->id }}">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Транзакция по {{ $value->currency->name }}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Действие</label>
-                                <select class="form-control" name="result" aria-label="Action">
-                                    <option value="buy">Докупить</option>
-                                    <option value="sell">Продать</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Количество монет</label>
-                                <input type="text" class="form-control" name="quantity" placeholder="0.0000000">
-                            </div>
-                            <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Цена за монету, $</label>
-                                <input type="text" class="form-control" name="price" placeholder="0.0000000">
-                            </div>
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" id="liveToastBtn">Сохранить</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    @endforeach
-
-    <div class="modal fade" id="assetCreateModal" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="POST" action="{{ route('asset.create') }}">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Добавить актив</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Актив</label>
-                            <select class="form-control" name="currency" aria-label="Currrency select">
-                                @foreach($currencies as $key => $currency)
-                                    <option value="{{ $key }}">{{ $currency }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Количество монет</label>
-                            <input type="text" class="form-control" name="quantity" placeholder="0.0000000">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Цена за монету, $</label>
-                            <input type="text" class="form-control" name="price" placeholder="0.0000000">
-                        </div>
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="liveToastBtn">Сохранить</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    @if(session()->pull('asset.create.error'))
-        <script>
-            $(document).ready(function() {
-                let assetCreateModal = new bootstrap.Modal(document.getElementById('assetCreateModal'))
-                assetCreateModal.show()
-            });
-        </script>
-    @endif
-
-    @if(session()->pull('transaction.create.error'))
-        <script>
-            $(document).ready(function() {
-                let assetCreateModal = new bootstrap.Modal(document.getElementById('exampleModal'))
-                assetCreateModal.show()
-            });
-        </script>
-    @endif
-
-    @if(session()->exists('notification'))
-        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
-            <div id="liveToast" data-autohide="true" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <img src="{{ asset('img/logo.png') }}" width="20" class="rounded me-2" alt="">
-                    <strong class="me-auto">Новое уведомление</strong>
-                    <small>Только что</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    {{ session()->pull('notification') }}
-                </div>
-            </div>
-        </div>
-        <script>
-            $(document).ready(function() {
-                $(".toast").toast('show');
-            });
-        </script>
-    @endif
 @endsection

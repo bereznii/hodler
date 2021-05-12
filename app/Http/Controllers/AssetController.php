@@ -8,6 +8,9 @@ use App\Models\Currency;
 use App\Models\Fiat;
 use App\Models\Transaction;
 use App\Rules\Decimal;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -69,7 +72,7 @@ class AssetController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function create(PriceRequest $request)
+    public function store(PriceRequest $request)
     {
         try {
             $validated = $request->validate([
@@ -99,6 +102,16 @@ class AssetController extends Controller
         }
 
         return redirect()->route('advanced');
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function create()
+    {
+        $currencies = Currency::getForSelect();
+
+        return view('_asset_form', compact('currencies'));
     }
 
     /**

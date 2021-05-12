@@ -40,9 +40,9 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header border-0">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#fiatCreateModal">
+                            <a href="{{ route('fiat.create.form') }}" class="btn btn-primary">
                                 Добавить вложение
-                            </button>
+                            </a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -84,48 +84,5 @@
         <!-- /.container-fluid -->
     </div>
     <!-- /.content -->
-
-    <div class="modal fade" id="fiatCreateModal" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="POST" action="{{ route('fiat.create') }}">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Добавить вложение</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Размер, $</label>
-                            <input type="text" class="form-control" name="price" placeholder="0.0000000">
-                        </div>
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="liveToastBtn">Сохранить</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    @if(session()->pull('fiat.create.error'))
-        <script>
-            $(document).ready(function() {
-                let fiatCreateModal = new bootstrap.Modal(document.getElementById('fiatCreateModal'))
-                fiatCreateModal.show()
-            });
-        </script>
-    @endif
 
 @endsection
