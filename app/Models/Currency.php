@@ -93,7 +93,7 @@ class Currency extends Model
      */
     public function getCurrentPrice(): string
     {
-        return self::formatFloat($this->price);
+        return self::formatPrice($this->price);
     }
 
     /**
@@ -103,5 +103,14 @@ class Currency extends Model
     private static function formatFloat(float|int $value): string
     {
         return number_format((float)$value, 2, '.', '');
+    }
+
+    /**
+     * @param float|int $value
+     * @return string
+     */
+    private static function formatPrice(float|int $value): string
+    {
+        return number_format((float)$value, 4, '.', '');
     }
 }

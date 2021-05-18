@@ -69,7 +69,7 @@ class Asset extends Model
     public function getBuyPrice(): float
     {
         $price = $this->getAveragePrice() * $this->getAssetQuantity();
-        return self::formatFloat($price);
+        return self::formatPrice($price);
     }
 
     /**
@@ -126,7 +126,7 @@ class Asset extends Model
         }, ['quantity' => 0, 'price' => 0]);
 
         $price = $result['price'] / ($result['quantity'] == 0 ? 1 : $result['quantity']);
-        return self::formatFloat($price);
+        return self::formatPrice($price);
     }
 
     /**
@@ -156,7 +156,7 @@ class Asset extends Model
                 return $carry + $item->getBuyPrice();
             });
 
-        return self::formatFloat($price);
+        return self::formatPrice($price);
     }
 
     /**
@@ -166,6 +166,15 @@ class Asset extends Model
     private static function formatFloat(float|int $value): string
     {
         return number_format((float)$value, 2, '.', '');
+    }
+
+    /**
+     * @param float|int $value
+     * @return string
+     */
+    private static function formatPrice(float|int $value): string
+    {
+        return number_format((float)$value, 4, '.', '');
     }
 
     /**
