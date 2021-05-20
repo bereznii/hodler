@@ -64,7 +64,7 @@ class Currency extends Model
      */
     public static function getForSelect()
     {
-        return self::select([
+        $currencies = self::select([
                 'cmc_id',
                 DB::raw("CONCAT(cmc_rank,'. ',symbol,' ',name) as symbol")
             ])
@@ -75,6 +75,20 @@ class Currency extends Model
             ->get()
             ->pluck('symbol', 'cmc_id')
             ->toArray();
+
+        //TODO: temporary solution, as always
+        $exceptions = self::select([
+                'cmc_id',
+                DB::raw("CONCAT(cmc_rank,'. ',symbol,' ',name) as symbol")
+            ])
+            ->whereNotIn('cmc_id', Asset::getUserCurrencies())
+            ->where('name', 'DIA')
+            ->orderBy('cmc_rank')
+            ->get()
+            ->pluck('symbol', 'cmc_id')
+            ->toArray();
+
+        dd(array_merge($currencies, $exceptions));
     }
 
     /**

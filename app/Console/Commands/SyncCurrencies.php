@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\Log;
 
 class SyncCurrencies extends Command
 {
-    private const MARKET_CAP_MIN = 1000000000;
-    private const DEFAULT_LIMIT = 5000;
-    private const DEFAULT_CMC_RANK = 101;
+    private const MARKET_CAP_MIN = 80000000;
+//    private const MARKET_CAP_MIN = 1000000000;
+    private const DEFAULT_LIMIT = 500;
+    private const DEFAULT_CMC_RANK = 401;
 
     /**
      * The name and signature of the console command.
@@ -50,6 +51,7 @@ class SyncCurrencies extends Command
                 'X-CMC_PRO_API_KEY' => env('CMC_TOKEN'),
             ],
             'query' => [
+                'limit' => self::DEFAULT_LIMIT,
                 'market_cap_min' => self::MARKET_CAP_MIN
             ]
         ]);
