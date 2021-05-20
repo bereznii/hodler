@@ -88,7 +88,7 @@ class Currency extends Model
             ->pluck('symbol', 'cmc_id')
             ->toArray();
 
-        dd(array_merge($currencies, $exceptions));
+        return array_merge($currencies, $exceptions);
     }
 
     /**
