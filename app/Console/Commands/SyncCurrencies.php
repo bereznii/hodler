@@ -11,7 +11,7 @@ class SyncCurrencies extends Command
 {
     private const MARKET_CAP_MIN = 80000000;
 //    private const MARKET_CAP_MIN = 1000000000;
-    private const DEFAULT_LIMIT = 500;
+    private const DEFAULT_LIMIT = 399;
     private const DEFAULT_CMC_RANK = 401;
 
     /**
@@ -52,7 +52,7 @@ class SyncCurrencies extends Command
             ],
             'query' => [
                 'limit' => self::DEFAULT_LIMIT,
-                'market_cap_min' => self::MARKET_CAP_MIN
+//                'market_cap_min' => self::MARKET_CAP_MIN
             ]
         ]);
 
