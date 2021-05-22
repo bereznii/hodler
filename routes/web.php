@@ -27,6 +27,7 @@ Route::post('/delete-asset/{id}', [App\Http\Controllers\AssetController::class, 
 
 Route::get('/asset/{id}/transaction', [App\Http\Controllers\TransactionController::class, 'create'])->name('transaction.create.form');
 Route::post('/asset/{id}/transaction', [App\Http\Controllers\TransactionController::class, 'store'])->name('transaction.create');
+Route::post('/asset/{asset_id}/transaction/{id}/delete', [App\Http\Controllers\TransactionController::class, 'delete'])->name('transaction.delete');
 
 Route::get('/fiat', [App\Http\Controllers\FiatController::class, 'index'])->name('fiat');
 Route::post('/fiat', [App\Http\Controllers\FiatController::class, 'store'])->name('fiat.create');

@@ -25,6 +25,52 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
+                <div class="col-md-6 col-xl-3 col-12">
+                    <div class="info-box shadow-none">
+                        <span class="info-box-icon bg-warning"><i class="fas fa-money-bill-wave"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Фиатные вложения</span>
+                            <span class="info-box-number">{{ $fiatInvested }}$</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3 col-12">
+                    <div class="info-box shadow-none">
+                        <span class="info-box-icon {{ $fiatInvested < $assetPrice ? 'bg-success' : 'bg-danger' }}">
+                            <i class="fas fa-wallet"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Стоимость актива</span>
+                            <span class="info-box-number {{ $fiatInvested < $assetPrice ? 'text-success' : 'text-danger' }}">
+                                {{ $assetPrice }}$
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3 col-12">
+                    <div class="info-box shadow-none">
+                        <span class="info-box-icon {{ $pnl['percentDifference'] > 0 ? 'bg-success' : 'bg-danger' }}">
+                            <i class="fas fa-exchange-alt"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                PNL по активу
+                            </span>
+                            <span class="info-box-number {{ $pnl['percentDifference'] > 0 ? 'text-success' : 'text-danger' }}">
+                                {!! $pnl['percentDifference'] > 0 ? '<i class="far fa-arrow-alt-circle-up"></i>' : '<i class="far fa-arrow-alt-circle-down"></i>' !!}
+                                {{ $pnl['moneyDifference'] }}$ | {{ $pnl['percentDifference'] }}%
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-body">
@@ -68,6 +114,60 @@
                                     @endif
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Актив</th>
+                                        <th>Количество</th>
+                                        <th>Цена за монету</th>
+                                        <th>Транзакция</th>
+                                        <th>Время</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($transactions as $transaction)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex flex-row justify-content-start">
+                                                    <img class="coin-logo mr-1" src="https://s2.coinmarketcap.com/static/img/coins/64x64/{{ $transaction->asset->currency_id }}.png" width="22" height="22">
+                                                    {{ $transaction->asset->currency->name }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{ $transaction->quantity }}
+                                            </td>
+                                            <td>
+                                                {{ $transaction->price }}$
+                                            </td>
+                                            <td>
+                                                {{ $transaction->getResultName() }}
+                                            </td>
+                                            <td>
+                                                {{ $transaction->created_at }}
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-danger confirm-delete" href="#" data-confirm="Удалить транзакцию?" data-delete-form="delete-transaction-{{ $transaction->id }}">
+                                                    Удалить
+                                                </a>
+                                                <form id="delete-transaction-{{ $transaction->id }}" action="{{ route('transaction.delete', ['asset_id' => $transaction->asset_id, 'id' => $transaction->id]) }}" method="POST" class="d-none">
+                                                    @csrf
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

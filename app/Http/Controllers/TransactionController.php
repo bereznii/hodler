@@ -29,12 +29,26 @@ class TransactionController extends Controller
      */
     public function create($id)
     {
+        $transactions = Transaction::with(['asset','asset.currency'])
+            ->whereHas('asset', function ($query) use ($id) {
+                return $query->where([
+                    ['assets.user_id', Auth::id()],
+                    ['assets.id', $id],
+                ]);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         $asset = Asset::where([
             'id' => $id,
             'user_id' => Auth::id(),
         ])->firstOrFail();
 
-        return view('_transaction_form', compact('asset'));
+        $fiatInvested = Transaction::getFiatInvestedInAsset($transactions);
+        $assetPrice = $asset->getAssetPrice();
+        $pnl = Asset::getTotalPnl($assetPrice, $fiatInvested);
+
+        return view('_transaction_form', compact('asset', 'transactions', 'fiatInvested', 'assetPrice', 'pnl'));
     }
 
     /**
@@ -64,6 +78,26 @@ class TransactionController extends Controller
             $request->session()->flash('notification', 'Произошла ошибка.');
         }
 
-        return redirect()->route('advanced');
+        return redirect()->route('transaction.create.form', ['id' => $asset->id]);
+    }
+
+    /**
+     * @param $assetId
+     * @param $transactionId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete($assetId, $transactionId)
+    {
+        $asset = Asset::where([
+            ['user_id', Auth::id()],
+            ['id', $assetId],
+        ])->firstOrFail();
+
+        Transaction::where([
+            ['id', $transactionId],
+            ['asset_id', $asset->id],
+        ])->delete();
+
+        return redirect()->route('transaction.create.form', ['id' => $asset->id]);
     }
 }
