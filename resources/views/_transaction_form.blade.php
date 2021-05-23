@@ -71,6 +71,56 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-6 col-xl-3 col-12">
+                    <div class="info-box shadow-none">
+                        <span class="info-box-icon bg-info">
+                            <i class="fas fa-dollar-sign"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Средняя цена покупки</span>
+                            <span class="info-box-number">
+                                {{ $asset->getAveragePrice() }}$
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3 col-12">
+                    <div class="info-box shadow-none">
+                        <span class="info-box-icon {{ $asset->currency->getCurrentPrice() > $asset->getAveragePrice() ? 'bg-success' : 'bg-danger' }}">
+                            <i class="fas fa-dollar-sign"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Текущая цена</span>
+                            <span class="info-box-number {{ $asset->currency->getCurrentPrice() > $asset->getAveragePrice() ? 'text-success' : 'text-danger' }}">
+                                {{ $asset->currency->getCurrentPrice() }}%
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3 col-12">
+                    <div class="info-box shadow-none">
+                        <span class="info-box-icon {{ $pnl['percentDifference'] > 0 ? 'bg-success' : 'bg-danger' }}">
+                            <i class="fas fa-exchange-alt"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                PNL по цене монеты
+                            </span>
+                            <span class="info-box-number {{ $coinPricePnl['percentDifference'] > 0 ? 'text-success' : 'text-danger' }}">
+                                {!! $coinPricePnl['percentDifference'] > 0 ? '<i class="far fa-arrow-alt-circle-up"></i>' : '<i class="far fa-arrow-alt-circle-down"></i>' !!}
+                                {{ $coinPricePnl['percentDifference'] }}%
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-body">

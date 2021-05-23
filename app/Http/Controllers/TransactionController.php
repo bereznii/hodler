@@ -47,8 +47,9 @@ class TransactionController extends Controller
         $fiatInvested = Transaction::getFiatInvestedInAsset($transactions);
         $assetPrice = $asset->getAssetPrice();
         $pnl = Asset::getTotalPnl($assetPrice, $fiatInvested);
+        $coinPricePnl = Asset::getTotalPnl($asset->currency->getCurrentPrice(), $asset->getAveragePrice());
 
-        return view('_transaction_form', compact('asset', 'transactions', 'fiatInvested', 'assetPrice', 'pnl'));
+        return view('_transaction_form', compact('asset', 'transactions', 'fiatInvested', 'assetPrice', 'pnl', 'coinPricePnl'));
     }
 
     /**
