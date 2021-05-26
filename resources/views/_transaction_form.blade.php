@@ -25,7 +25,7 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-6 col-xl-3 col-12">
+                <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
                         <span class="info-box-icon bg-warning"><i class="fas fa-money-bill-wave"></i></span>
 
@@ -36,7 +36,7 @@
                         <!-- /.info-box-content -->
                     </div>
                 </div>
-                <div class="col-md-6 col-xl-3 col-12">
+                <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
                         <span class="info-box-icon {{ $fiatInvested < $assetPrice ? 'bg-success' : 'bg-danger' }}">
                             <i class="fas fa-wallet"></i>
@@ -51,7 +51,7 @@
                         <!-- /.info-box-content -->
                     </div>
                 </div>
-                <div class="col-md-6 col-xl-3 col-12">
+                <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
                         <span class="info-box-icon {{ $pnl['percentDifference'] > 0 ? 'bg-success' : 'bg-danger' }}">
                             <i class="fas fa-exchange-alt"></i>
@@ -71,7 +71,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 col-xl-3 col-12">
+                <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
                         <span class="info-box-icon bg-info">
                             <i class="fas fa-dollar-sign"></i>
@@ -86,7 +86,7 @@
                         <!-- /.info-box-content -->
                     </div>
                 </div>
-                <div class="col-md-6 col-xl-3 col-12">
+                <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
                         <span class="info-box-icon {{ $asset->currency->getCurrentPrice() > $asset->getAveragePrice() ? 'bg-success' : 'bg-danger' }}">
                             <i class="fas fa-dollar-sign"></i>
@@ -95,13 +95,13 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Текущая цена</span>
                             <span class="info-box-number {{ $asset->currency->getCurrentPrice() > $asset->getAveragePrice() ? 'text-success' : 'text-danger' }}">
-                                {{ $asset->currency->getCurrentPrice() }}%
+                                {{ $asset->currency->getCurrentPrice() }}$
                             </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
-                <div class="col-md-6 col-xl-3 col-12">
+                <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
                         <span class="info-box-icon {{ $pnl['percentDifference'] > 0 ? 'bg-success' : 'bg-danger' }}">
                             <i class="fas fa-exchange-alt"></i>
@@ -121,12 +121,15 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-xl-4 col-lg-6 col-sm-12 col-12">
                     <div class="card">
+                        <div class="card-header">
+                            Добавить транзакцию
+                        </div>
                         <div class="card-body">
                             <form method="post" action="{{ route('transaction.create', ['id' => $asset->id]) }}">
                                 @csrf
-                                <div class="col-sm-4">
+                                <div class="col-sm-12">
                                     <div class="mb-3">
                                         <label for="exampleFormControlInput1" class="form-label">Действие</label>
                                         <select class="form-control" name="result" aria-label="Action">
@@ -135,33 +138,62 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-12">
                                     <div class="mb-3">
                                         <label for="exampleFormControlInput1" class="form-label">Количество монет</label>
                                         <input type="text" class="form-control" name="quantity" placeholder="0.0000000" value="{{ old('quantity') }}">
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-12">
                                     <div class="mb-3">
                                         <label for="exampleFormControlInput1" class="form-label">Цена за монету, $</label>
                                         <input type="text" class="form-control" name="price" placeholder="0.0000000" value="{{ old('price') }}">
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="mb-3">
-                                        <button class="btn btn-success" type="submit">Сохранить</button>
-                                    </div>
+                                <div class="col-sm-12">
+                                    <button class="btn btn-success" type="submit">Сохранить</button>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-12">
                                     @if ($errors->any())
-                                        <div class="alert alert-danger">
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
+                                        <div class="mt-3">
+                                            <div class="alert alert-danger">
+                                                <ul>
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
                                         </div>
                                     @endif
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            Калькулятор
+                        </div>
+                        <div class="card-body">
+                            <form id="buyCalculator">
+                                <div class="col-sm-12">
+                                    <div class="mb-3">
+                                        <label for="buyCalculator_fiat" class="form-label">Фиатные вложения, $</label>
+                                        <input type="text" class="form-control" id="buyCalculator_fiat" placeholder="0.0000000">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="mb-3">
+                                        <label for="buyCalculator_price" class="form-label">Цена за монету, $</label>
+                                        <input type="text" class="form-control" id="buyCalculator_price" placeholder="0.0000000">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="mb-3">
+                                        <label for="buyCalculator_result" class="form-label">Можно купить монет</label>
+                                        <input type="text" class="form-control" id="buyCalculator_result" placeholder="0.0000000">
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -224,4 +256,25 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function(){
+            function calculate() {
+                let fiat = parseFloat($('#buyCalculator_fiat').val());
+                let price = parseFloat($('#buyCalculator_price').val());
+                fiat = fiat ? fiat : 1;
+                price = price ? price : 1;
+                let result = fiat / price;
+                $('#buyCalculator_result').val(result);
+            }
+
+            $('#buyCalculator_fiat').on('keyup', function () {
+                calculate();
+            });
+
+            $('#buyCalculator_price').on('keyup', function () {
+                calculate();
+            });
+        });
+    </script>
 @endsection
