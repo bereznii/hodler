@@ -36,6 +36,8 @@ class Currency extends Model
 {
     use HasFactory;
 
+    private const BTC_SYMBOL = 'BTC';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -112,5 +114,14 @@ class Currency extends Model
     private static function formatPrice(float|int $value): string
     {
         return number_format((float)$value, 4, '.', '');
+    }
+
+    /**
+     * @return string
+     */
+    public static function getBtcPrice(): string
+    {
+        $price = self::where('symbol', self::BTC_SYMBOL)->first()?->price;
+        return number_format((float)$price, 4, '.', '');
     }
 }

@@ -57,13 +57,14 @@ class AssetController extends Controller
         $investedPrice = Asset::getInvestedPrice($assets);
         $overallPrice = Asset::getOverallPrice($assets);
         $currencyUpdate = Currency::getLastUpdateTime();
+        $btcPrice = Currency::getBtcPrice();
         $fiatInvested = Fiat::getInvestmentsSize();
         $totalPnl = Asset::getTotalPnl($overallPrice, $fiatInvested);
         $isPositive = $totalPnl['moneyDifference'] > 0;
 
         return view(
             'advanced-dashboard',
-            compact('currencies', 'assets', 'investedPrice', 'overallPrice', 'currencyUpdate', 'fiatInvested', 'totalPnl', 'isPositive')
+            compact('currencies', 'assets', 'investedPrice', 'overallPrice', 'currencyUpdate', 'fiatInvested', 'totalPnl', 'isPositive', 'btcPrice')
         );
     }
 

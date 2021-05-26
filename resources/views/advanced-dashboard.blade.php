@@ -86,6 +86,23 @@
                         <!-- /.info-box-content -->
                     </div>
                 </div>
+                <div class="col-md-6 col-xl-3 col-12">
+                    <div class="info-box shadow-none">
+                        <span class="info-box-icon bg-secondary">
+                            <i class="fab fa-bitcoin"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                Стоимость BTC
+                            </span>
+                            <span class="info-box-number">
+                                {{ $btcPrice }}$
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
