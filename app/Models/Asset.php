@@ -102,14 +102,22 @@ class Asset extends Model
      */
     public function getAssetQuantity(): float
     {
-        return array_reduce($this->transactions->toArray(), function ($carry, $item) {
+        $res = array_reduce($this->transactions->toArray(), function ($carry, $item) {
+            $quantity = (float) $item['quantity'];
+            $carry = (float) $carry;
+
             if ($item['result'] === Transaction::RESULT_BUY) {
-                $carry += $item['quantity'];
+                $carry = $carry + $quantity;
             } else {
-                $carry -= $item['quantity'];
+                $carry = round($carry - $quantity, 10);
             }
+
             return $carry;
-        }, 0);
+        }, 0.0);
+
+        return $res == 0
+            ? 0
+            : $res;
     }
 
     /**
