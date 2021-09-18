@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Currency;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -11,8 +11,8 @@ class SyncCurrencies extends Command
 {
     private const MARKET_CAP_MIN = 80000000;
 //    private const MARKET_CAP_MIN = 1000000000;
-    private const DEFAULT_LIMIT = 399;
-    private const DEFAULT_CMC_RANK = 401;
+    private const DEFAULT_LIMIT = 700;
+    private const DEFAULT_CMC_RANK = 701;
 
     /**
      * The name and signature of the console command.
@@ -40,23 +40,16 @@ class SyncCurrencies extends Command
 
     /**
      * @return int
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function handle()
     {
-        $client = new Client(['base_uri' => 'https://pro-api.coinmarketcap.com']);
-
-        $response = $client->get('/v1/cryptocurrency/listings/latest', [
-            'headers' => [
-                'X-CMC_PRO_API_KEY' => env('CMC_TOKEN'),
-            ],
-            'query' => [
-                'limit' => self::DEFAULT_LIMIT,
+        $contents = Http::withHeaders([
+            'X-CMC_PRO_API_KEY' => env('CMC_TOKEN'),
+        ])->get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', [
+            'limit' => self::DEFAULT_LIMIT,
 //                'market_cap_min' => self::MARKET_CAP_MIN
-            ]
-        ]);
+        ])->body();
 
-        $contents = $response->getBody()->getContents();
 
         if ($contents = json_decode($contents, true)) {
             foreach ($contents['data'] ?? [] as $currency) {
@@ -75,7 +68,7 @@ class SyncCurrencies extends Command
                 );
             }
             Currency::where('updated_at', '<', \DB::raw('DATE_SUB(NOW(), INTERVAL 1 MINUTE)'))
-                ->update(['cmc_rank' => self::DEFAULT_CMC_RANK]);
+                ->update(['cmc_rank' => (self::DEFAULT_LIMIT + 1)]);
         }
 
         Log::info('Currencies sync finished');

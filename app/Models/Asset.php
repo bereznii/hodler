@@ -8,6 +8,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * App\Models\Asset
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $currency_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Currency $currency
+ * @property-read Collection|\App\Models\Transaction[] $transactions
+ * @property-read int|null $transactions_count
+ * @method static Builder|Asset newModelQuery()
+ * @method static Builder|Asset newQuery()
+ * @method static Builder|Asset query()
+ * @method static Builder|Asset whereCreatedAt($value)
+ * @method static Builder|Asset whereCurrencyId($value)
+ * @method static Builder|Asset whereId($value)
+ * @method static Builder|Asset whereUpdatedAt($value)
+ * @method static Builder|Asset whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Asset extends Model
 {
     use HasFactory;

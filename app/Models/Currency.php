@@ -31,6 +31,8 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder|Currency whereSymbol($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Currency whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Asset[] $assets
+ * @property-read int|null $assets_count
  */
 class Currency extends Model
 {
