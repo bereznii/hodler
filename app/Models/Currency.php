@@ -73,9 +73,9 @@ class Currency extends Model
                 DB::raw("CONCAT(cmc_rank,'. ',symbol,' ',name) as symbol")
             ])
             ->whereNotIn('cmc_id', Asset::getUserCurrencies())
-            ->where('cmc_rank', '<=', 400)
+            ->where('cmc_rank', '<=', 700)
             ->orderBy('cmc_rank')
-            ->limit(400)
+            ->limit(700)
             ->get()
             ->pluck('symbol', 'cmc_id')
             ->toArray();
