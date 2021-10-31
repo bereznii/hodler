@@ -2,7 +2,6 @@
 
 @section('content')
 
-    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -16,44 +15,54 @@
                         <li class="breadcrumb-item active">Транзакция по {{ $asset->currency->name }}</li>
                     </ol>
                 </div>
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
             <div class="row">
+                {{--Фиатные вложения--}}
                 <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
                         <span class="info-box-icon bg-warning"><i class="fas fa-money-bill-wave"></i></span>
 
                         <div class="info-box-content">
                             <span class="info-box-text">Фиатные вложения</span>
-                            <span class="info-box-number">{{ $fiatInvested }}$</span>
+                            <span class="info-box-number">{{ $asset->getAssetMetrics()->investedMoney }}$</span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
                 </div>
+                {{--Стоимость актива--}}
                 <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
-                        <span class="info-box-icon {{ $fiatInvested < $assetPrice ? 'bg-success' : 'bg-danger' }}">
+                        <span class="info-box-icon
+                                {{ $asset->getAssetMetrics()->investedMoney < $asset->getAssetMetrics()->currentAssetPrice
+                                    ? 'bg-success'
+                                    : 'bg-danger' }}
+                            "
+                        >
                             <i class="fas fa-wallet"></i>
                         </span>
 
                         <div class="info-box-content">
                             <span class="info-box-text">Стоимость актива</span>
-                            <span class="info-box-number {{ $fiatInvested < $assetPrice ? 'text-success' : 'text-danger' }}">
-                                {{ $assetPrice }}$
+                            <span class="info-box-number
+                                    {{ $asset->getAssetMetrics()->investedMoney < $asset->getAssetMetrics()->currentAssetPrice
+                                    ? 'text-success'
+                                    : 'text-danger' }}
+                                "
+                            >
+                                {{ $asset->getAssetMetrics()->currentAssetPrice }}$
                             </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
+                {{--PNL по активу--}}
                 <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
-                        <span class="info-box-icon {{ $pnl['percentDifference'] > 0 ? 'bg-success' : 'bg-danger' }}">
+                        <span class="info-box-icon {{ $asset->getAssetMetrics()->pnl['percentDifference'] > 0 ? 'bg-success' : 'bg-danger' }}">
                             <i class="fas fa-exchange-alt"></i>
                         </span>
 
@@ -61,9 +70,9 @@
                             <span class="info-box-text">
                                 PNL по активу
                             </span>
-                            <span class="info-box-number {{ $pnl['percentDifference'] > 0 ? 'text-success' : 'text-danger' }}">
-                                {!! $pnl['percentDifference'] > 0 ? '<i class="far fa-arrow-alt-circle-up"></i>' : '<i class="far fa-arrow-alt-circle-down"></i>' !!}
-                                {{ $pnl['moneyDifference'] }}$ | {{ $pnl['percentDifference'] }}%
+                            <span class="info-box-number {{ $asset->getAssetMetrics()->pnl['percentDifference'] > 0 ? 'text-success' : 'text-danger' }}">
+                                {!! $asset->getAssetMetrics()->pnl['percentDifference'] > 0 ? '<i class="far fa-arrow-alt-circle-up"></i>' : '<i class="far fa-arrow-alt-circle-down"></i>' !!}
+                                {{ $asset->getAssetMetrics()->pnl['moneyDifference'] }}$ | {{ $asset->getAssetMetrics()->pnl['percentDifference'] }}%
                             </span>
                         </div>
                         <!-- /.info-box-content -->
@@ -71,6 +80,7 @@
                 </div>
             </div>
             <div class="row">
+                {{--Средняя цена покупки--}}
                 <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
                         <span class="info-box-icon bg-info">
@@ -80,30 +90,32 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Средняя цена покупки</span>
                             <span class="info-box-number">
-                                {{ $asset->getAveragePrice() }}$
+                                {{ $asset->getAssetMetrics()->averageBuyPrice }}$
                             </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
+                {{--Текущая цена--}}
                 <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
-                        <span class="info-box-icon {{ $asset->currency->getCurrentPrice() > $asset->getAveragePrice() ? 'bg-success' : 'bg-danger' }}">
+                        <span class="info-box-icon {{ $asset->getAssetMetrics()->actualPrice > $asset->getAssetMetrics()->averageBuyPrice ? 'bg-success' : 'bg-danger' }}">
                             <i class="fas fa-dollar-sign"></i>
                         </span>
 
                         <div class="info-box-content">
                             <span class="info-box-text">Текущая цена</span>
-                            <span class="info-box-number {{ $asset->currency->getCurrentPrice() > $asset->getAveragePrice() ? 'text-success' : 'text-danger' }}">
-                                {{ $asset->currency->getCurrentPrice() }}$
+                            <span class="info-box-number {{ $asset->getAssetMetrics()->actualPrice > $asset->getAssetMetrics()->averageBuyPrice ? 'text-success' : 'text-danger' }}">
+                                {{ $asset->getAssetMetrics()->actualPrice }}$
                             </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
+                {{--PNL по цене монеты--}}
                 <div class="col-md-4 col-xl-3 col-12">
                     <div class="info-box shadow-none">
-                        <span class="info-box-icon {{ $pnl['percentDifference'] > 0 ? 'bg-success' : 'bg-danger' }}">
+                        <span class="info-box-icon {{ $asset->getAssetMetrics()->coinPricePnl['percentDifference'] > 0 ? 'bg-success' : 'bg-danger' }}">
                             <i class="fas fa-exchange-alt"></i>
                         </span>
 
@@ -111,9 +123,9 @@
                             <span class="info-box-text">
                                 PNL по цене монеты
                             </span>
-                            <span class="info-box-number {{ $coinPricePnl['percentDifference'] > 0 ? 'text-success' : 'text-danger' }}">
-                                {!! $coinPricePnl['percentDifference'] > 0 ? '<i class="far fa-arrow-alt-circle-up"></i>' : '<i class="far fa-arrow-alt-circle-down"></i>' !!}
-                                {{ $coinPricePnl['percentDifference'] }}%
+                            <span class="info-box-number {{ $asset->getAssetMetrics()->coinPricePnl['percentDifference'] > 0 ? 'text-success' : 'text-danger' }}">
+                                {!! $asset->getAssetMetrics()->coinPricePnl['percentDifference'] > 0 ? '<i class="far fa-arrow-alt-circle-up"></i>' : '<i class="far fa-arrow-alt-circle-down"></i>' !!}
+                                {{ $asset->getAssetMetrics()->coinPricePnl['percentDifference'] }}%
                             </span>
                         </div>
                         <!-- /.info-box-content -->
@@ -170,35 +182,35 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-4 col-lg-6 col-sm-12 col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            Калькулятор
-                        </div>
-                        <div class="card-body">
-                            <form id="buyCalculator">
-                                <div class="col-sm-12">
-                                    <div class="mb-3">
-                                        <label for="buyCalculator_fiat" class="form-label">Фиатные вложения, $</label>
-                                        <input type="text" class="form-control" id="buyCalculator_fiat" placeholder="0.0000000">
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="mb-3">
-                                        <label for="buyCalculator_price" class="form-label">Цена за монету, $</label>
-                                        <input type="text" class="form-control" id="buyCalculator_price" placeholder="0.0000000">
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="mb-3">
-                                        <label for="buyCalculator_result" class="form-label">Можно купить монет</label>
-                                        <input type="text" class="form-control" id="buyCalculator_result" placeholder="0.0000000">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+{{--                <div class="col-xl-4 col-lg-6 col-sm-12 col-12">--}}
+{{--                    <div class="card">--}}
+{{--                        <div class="card-header">--}}
+{{--                            Калькулятор--}}
+{{--                        </div>--}}
+{{--                        <div class="card-body">--}}
+{{--                            <form id="buyCalculator">--}}
+{{--                                <div class="col-sm-12">--}}
+{{--                                    <div class="mb-3">--}}
+{{--                                        <label for="buyCalculator_fiat" class="form-label">Фиатные вложения, $</label>--}}
+{{--                                        <input type="text" class="form-control" id="buyCalculator_fiat" placeholder="0.0000000">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-sm-12">--}}
+{{--                                    <div class="mb-3">--}}
+{{--                                        <label for="buyCalculator_price" class="form-label">Цена за монету, $</label>--}}
+{{--                                        <input type="text" class="form-control" id="buyCalculator_price" placeholder="0.0000000">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-sm-12">--}}
+{{--                                    <div class="mb-3">--}}
+{{--                                        <label for="buyCalculator_result" class="form-label">Можно купить монет</label>--}}
+{{--                                        <input type="text" class="form-control" id="buyCalculator_result" placeholder="0.0000000">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </form>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             </div>
             <div class="row">
                 <div class="col-sm-12">
@@ -238,12 +250,14 @@
                                                 {{ $transaction->created_at }}
                                             </td>
                                             <td>
-                                                <a class="btn btn-outline-danger confirm-delete" href="#" data-confirm="Удалить транзакцию?" data-delete-form="delete-transaction-{{ $transaction->id }}">
-                                                    Удалить
-                                                </a>
-                                                <form id="delete-transaction-{{ $transaction->id }}" action="{{ route('transaction.delete', ['asset_id' => $transaction->asset_id, 'id' => $transaction->id]) }}" method="POST" class="d-none">
-                                                    @csrf
-                                                </form>
+                                                @if($transactions->count() !== 1)
+                                                    <a class="btn btn-outline-danger confirm-delete" href="#" data-confirm="Удалить транзакцию?" data-delete-form="delete-transaction-{{ $transaction->id }}">
+                                                        Удалить
+                                                    </a>
+                                                    <form id="delete-transaction-{{ $transaction->id }}" action="{{ route('transaction.delete', ['asset_id' => $transaction->asset_id, 'id' => $transaction->id]) }}" method="POST" class="d-none">
+                                                        @csrf
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

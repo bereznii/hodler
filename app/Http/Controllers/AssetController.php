@@ -7,12 +7,15 @@ use App\Models\Asset;
 use App\Models\Currency;
 use App\Models\Fiat;
 use App\Models\Transaction;
-use App\Rules\Decimal;
+use App\Repositories\AssetRepository;
+use App\Repositories\CurrencyRepository;
+use App\Repositories\FiatRepository;
+use App\Services\AssetService;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -29,16 +32,16 @@ class AssetController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return Renderable
      */
     public function index()
     {
-        $currencies = Currency::getForSelect();
-        $assets = Asset::getForTable();
-        $overallPrice = Asset::getOverallPrice($assets);
-        $currencyUpdate = Currency::getLastUpdateTime();
-        $fiatInvested = Fiat::getInvestmentsSize();
-        $totalPnl = Asset::getTotalPnl($overallPrice, $fiatInvested);
+        $currencies = CurrencyRepository::getForSelect();
+        $assets = AssetRepository::getForTable();
+        $overallPrice = AssetService::getOverallPrice($assets);
+        $currencyUpdate = CurrencyRepository::getLastUpdateTime();
+        $fiatInvested = FiatRepository::getInvestmentsSize();
+        $totalPnl = AssetService::getTotalPnl($overallPrice, $fiatInvested);
         $isPositive = $totalPnl['moneyDifference'] > 0;
 
         return view(
@@ -48,18 +51,18 @@ class AssetController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return Renderable
      */
     public function advanced()
     {
-        $currencies = Currency::getForSelect();
-        $assets = Asset::getForTable();
-        $investedPrice = Asset::getInvestedPrice($assets);
-        $overallPrice = Asset::getOverallPrice($assets);
-        $currencyUpdate = Currency::getLastUpdateTime();
-        $btcPrice = Currency::getBtcPrice();
-        $fiatInvested = Fiat::getInvestmentsSize();
-        $totalPnl = Asset::getTotalPnl($overallPrice, $fiatInvested);
+        $currencies = CurrencyRepository::getForSelect();
+        $assets = AssetRepository::getForTable();
+        $investedPrice = AssetService::getInvestedPrice($assets);
+        $overallPrice = AssetService::getOverallPrice($assets);
+        $currencyUpdate = CurrencyRepository::getLastUpdateTime();
+        $btcPrice = CurrencyRepository::getBtcPrice();
+        $fiatInvested = FiatRepository::getInvestmentsSize();
+        $totalPnl = AssetService::getTotalPnl($overallPrice, $fiatInvested);
         $isPositive = $totalPnl['moneyDifference'] > 0;
 
         return view(
@@ -70,8 +73,8 @@ class AssetController extends Controller
 
     /**
      * @param PriceRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @return RedirectResponse
+     * @throws ValidationException
      */
     public function store(PriceRequest $request)
     {
@@ -89,7 +92,6 @@ class AssetController extends Controller
         $asset->currency_id = $validated['currency'];
 
         if ($asset->save()) {
-
             $transaction = new Transaction();
             $transaction->asset_id = $asset->id;
             $transaction->quantity = $request->get('quantity');
@@ -110,14 +112,14 @@ class AssetController extends Controller
      */
     public function create()
     {
-        $currencies = Currency::getForSelect();
+        $currencies = CurrencyRepository::getForSelect();
 
         return view('_asset_form', compact('currencies'));
     }
 
     /**
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function delete($id)
     {

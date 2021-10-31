@@ -2,25 +2,22 @@
 
 @section('content')
 
-    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Расширенный дашборд</h1>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Домой</a></li>
                         <li class="breadcrumb-item active">Расширенный дашборд</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -32,7 +29,6 @@
                             <span class="info-box-text">Цены актуальны на</span>
                             <span class="info-box-number">{{ $currencyUpdate }}</span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
                 </div>
                 <div class="col-md-6 col-xl-3 col-12">
@@ -43,7 +39,6 @@
                             <span class="info-box-text">Фиатные вложения</span>
                             <span class="info-box-number">{{ $fiatInvested }}$</span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
                 </div>
                 <div class="col-md-6 col-xl-3 col-12">
@@ -54,7 +49,6 @@
                             <span class="info-box-text">Стоимость покупок</span>
                             <span class="info-box-number">{{ $investedPrice }}$</span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
                 </div>
                 <div class="col-md-6 col-xl-3 col-12">
@@ -65,7 +59,6 @@
                             <span class="info-box-text">Стоимость портфеля</span>
                             <span class="info-box-number {{ $isPositive ? 'text-success' : 'text-danger' }}">{{ $overallPrice }}$</span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
                 </div>
                 <div class="col-md-6 col-xl-3 col-12">
@@ -83,7 +76,6 @@
                                 {{ $totalPnl['moneyDifference'] }}$ | {{ $totalPnl['percentDifference'] }}%
                             </span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
                 </div>
                 <div class="col-md-6 col-xl-3 col-12">
@@ -100,7 +92,6 @@
                                 {{ $btcPrice }}$
                             </span>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
                 </div>
             </div>
@@ -139,14 +130,14 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                {{ $value->getAveragePrice() }}$
+                                                {{ $value->getAssetMetrics()->averageBuyPrice }}$
                                             </td>
                                             <td>
-                                                {{ $value->currency->getCurrentPrice() }}$
+                                                {{ $value->getAssetMetrics()->actualPrice }}$
                                             </td>
-                                            <td>{{ $value->getAssetQuantity() }}</td>
-                                            <td>{{ $value->getBuyPrice() }}$</td>
-                                            <td>{{ $value->getAssetPrice() }}$</td>
+                                            <td>{{ $value->getAssetMetrics()->coinsQuantity }}</td>
+                                            <td>{{ $value->getAssetMetrics()->investedMoney }}$</td>
+                                            <td>{{ $value->getAssetMetrics()->currentAssetPrice }}$</td>
                                             <td class="{{ $value->getPriceDifference('money') >= 0 ? 'text-success' : 'text-danger' }}">
                                                 <b>
                                                     {{ $value->getPriceDifference('percent') }}%
@@ -175,13 +166,9 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /.card -->
                 </div>
             </div>
-            <!-- /.row -->
         </div>
-        <!-- /.container-fluid -->
     </div>
-    <!-- /.content -->
 
 @endsection

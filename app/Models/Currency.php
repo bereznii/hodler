@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repositories\AssetRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -38,7 +39,7 @@ class Currency extends Model
 {
     use HasFactory;
 
-    private const BTC_SYMBOL = 'BTC';
+    public const BTC_SYMBOL = 'BTC';
 
     /**
      * The attributes that are mass assignable.
@@ -64,66 +65,10 @@ class Currency extends Model
     }
 
     /**
-     * @return array
-     */
-    public static function getForSelect()
-    {
-        return self::select([
-                'cmc_id',
-                DB::raw("CONCAT(cmc_rank,'. ',symbol,' ',name) as symbol")
-            ])
-            ->whereNotIn('cmc_id', Asset::getUserCurrencies())
-            ->where('cmc_rank', '<=', 400)
-            ->orderBy('cmc_rank')
-            ->limit(400)
-            ->get()
-            ->pluck('symbol', 'cmc_id')
-            ->toArray();
-    }
-
-    /**
-     * @return array
-     */
-    public static function getLastUpdateTime()
-    {
-        return self::select('updated_at')
-            ->orderBy('updated_at', 'desc')
-            ->first()
-            ->updated_at ?? null;
-    }
-
-    /**
      * @return string
      */
     public function getCurrentPrice(): string
     {
-        return self::formatPrice($this->price);
-    }
-
-    /**
-     * @param float|int $value
-     * @return string
-     */
-    private static function formatFloat(float|int $value): string
-    {
-        return number_format((float)$value, 2, '.', '');
-    }
-
-    /**
-     * @param float|int $value
-     * @return string
-     */
-    private static function formatPrice(float|int $value): string
-    {
-        return number_format((float)$value, 4, '.', '');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getBtcPrice(): string
-    {
-        $price = self::where('symbol', self::BTC_SYMBOL)->first()?->price;
-        return number_format((float)$price, 4, '.', '');
+        return number_format((float)$this->price, 4, '.', '');
     }
 }

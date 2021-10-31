@@ -58,21 +58,4 @@ class Transaction extends Model
             self::RESULT_SELL => self::RESULT_SELL_NAME,
         };
     }
-
-    /**
-     * @param $transactions
-     * @return float
-     */
-    public static function getFiatInvestedInAsset($transactions): float
-    {
-        $transactionsArray = $transactions->toArray();
-        return array_reduce($transactionsArray, function ($carry, $item) {
-            if ($item['result'] === self::RESULT_BUY) {
-                $carry += $item['quantity'] * $item['price'];
-            } elseif ($item['result'] === self::RESULT_SELL) {
-                $carry -= $item['quantity'] * $item['price'];
-            }
-            return $carry;
-        }, 0);
-    }
 }

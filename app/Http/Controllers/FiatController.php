@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PriceRequest;
-use App\Models\Asset;
 use App\Models\Fiat;
-use App\Models\Transaction;
+use App\Repositories\FiatRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -31,7 +29,7 @@ class FiatController extends Controller
     public function index()
     {
         $fiats = Fiat::where('user_id', Auth::id())->get();
-        $fiatInvested = Fiat::getInvestmentsSize();
+        $fiatInvested = FiatRepository::getInvestmentsSize();
 
         return view('fiat', compact('fiats', 'fiatInvested'));
     }

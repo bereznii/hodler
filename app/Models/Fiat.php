@@ -37,17 +37,4 @@ class Fiat extends Model
     {
         return (new \DateTime($value))->format('Y-m-d');
     }
-
-    /**
-     * @return float|int
-     */
-    public static function getInvestmentsSize(): float|int
-    {
-        $records = self::where('user_id', Auth::id())->pluck('price')->toArray();
-
-        return array_reduce($records, function ($carry, $item) {
-            $carry += $item;
-            return $carry;
-        }, 0);
-    }
 }
